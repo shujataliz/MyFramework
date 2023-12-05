@@ -8,13 +8,7 @@ public class MyFramework {
     static let pvtPasteBoard = UIPasteboard.withUniqueName()
     
     private init() {
-        originalPasteMethod = class_getClassMethod(UIPasteboard.self, #selector(getter: UIPasteboard.general))
-        swizPasteMethod = class_getInstanceMethod(object_getClass(self), #selector(privatePasteboard))
         
-        if let originalPasteMethodResult = originalPasteMethod, let swizPasteResult = swizPasteMethod {
-            origPasteMethodIMP = method_getImplementation(originalPasteMethodResult)
-            swizPasteMethodIMP = method_getImplementation(swizPasteResult)
-        }
     }
     
     static let shared = MyFramework()
@@ -31,7 +25,18 @@ public class MyFramework {
     }
     
     public static func disableCopyPasteSwizzleEnterprise() {
+        shared.configureEnterprise()
         shared.swizzleUIPasteboardGeneral2()
+    }
+    
+    func configureEnterprise() {
+        originalPasteMethod = class_getClassMethod(UIPasteboard.self, #selector(getter: UIPasteboard.general))
+        swizPasteMethod = class_getInstanceMethod(object_getClass(self), #selector(privatePasteboard))
+        
+        if let originalPasteMethodResult = originalPasteMethod, let swizPasteResult = swizPasteMethod {
+            origPasteMethodIMP = method_getImplementation(originalPasteMethodResult)
+            swizPasteMethodIMP = method_getImplementation(swizPasteResult)
+        }
     }
     
     public static func disableCopyPaste() {
