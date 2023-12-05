@@ -5,12 +5,45 @@ import UIKit
 
 public class MyFramework {
     
-    public init() {
-        
+    var pvtPasteBoard = UIPasteboard.withUniqueName()
+    
+    static let shared = MyFramework()
+    
+    public static func disableCopyPasteSwizzle() {
+        shared.swizzleUIPasteboardGeneral()
     }
     
-    public func enableCopyPaste() {
-        
+    public static func disableCopyPaste() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(shared.appMovedToBackground),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
+    }
+    
+    
+    
+    func swizzleUIPasteboardGeneral() {
+       let aClass: AnyClass! = object_getClass(UIPasteboard.general)
+       let targetClass: AnyClass! = object_getClass(self)
+
+       let originalMethod = class_getClassMethod(aClass, #selector(getter: UIPasteboard.general))
+       let swizzledMethod = class_getInstanceMethod(targetClass, #selector(privatePasteboard))
+
+       if let originalMethod, let swizzledMethod {
+           method_exchangeImplementations(originalMethod, swizzledMethod)
+       }
+    }
+    
+    @objc
+    func privatePasteboard() -> UIPasteboard {
+            return pvtPasteBoard
+    }
+    
+    @objc
+    func appMovedToBackground() {
+        UIPasteboard.general.string = ""
     }
 }
 
