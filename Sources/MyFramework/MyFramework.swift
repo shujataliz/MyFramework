@@ -5,9 +5,26 @@ import UIKit
 
 public class MyFramework {
     
-    var pvtPasteBoard = UIPasteboard.withUniqueName()
+    static let pvtPasteBoard = UIPasteboard.withUniqueName()
+    
+    private init() {
+        originalPasteMethod = class_getClassMethod(UIPasteboard.self, #selector(getter: UIPasteboard.general))
+        swizPasteMethod = class_getInstanceMethod(object_getClass(self), #selector(privatePasteboard))
+        
+        if let originalPasteMethodResult = originalPasteMethod, let swizPasteResult = swizPasteMethod {
+            origPasteMethodIMP = method_getImplementation(originalPasteMethodResult)
+            swizPasteMethodIMP = method_getImplementation(swizPasteResult)
+        }
+    }
     
     static let shared = MyFramework()
+    
+    var originalPasteMethod: Method?
+    var swizPasteMethod: Method?
+    
+    var origPasteMethodIMP: IMP?
+    var swizPasteMethodIMP: IMP?
+    
     
     public static func disableCopyPasteSwizzle() {
         shared.swizzleUIPasteboardGeneral()
@@ -23,7 +40,17 @@ public class MyFramework {
         )
     }
     
-    
+    func swizzleUIPasteboardGeneral2() {
+        if let originalMethod = originalPasteMethod,
+           let swizzleMethod = swizPasteMethod,
+           let originalMetodIMP = origPasteMethodIMP,
+           let swizMethodIMP = swizPasteMethodIMP {
+            method_setImplementation(originalMethod, originalMetodIMP)
+            method_setImplementation(swizzleMethod, swizMethodIMP)
+            
+            method_exchangeImplementations(originalMethod, swizzleMethod)
+        }
+    }
     
     func swizzleUIPasteboardGeneral() {
        let aClass: AnyClass! = object_getClass(UIPasteboard.general)
@@ -39,7 +66,7 @@ public class MyFramework {
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-            return pvtPasteBoard
+        return MyFramework.pvtPasteBoard
     }
     
     @objc
@@ -47,6 +74,13 @@ public class MyFramework {
         UIPasteboard.general.string = ""
     }
 }
+
+//extension UIPasteboard {
+//    @_dynamicReplacement(for: generalPasteboard)
+//    static var privatePasteboard: UIPasteboard {
+//        return MyFramework.shared.pvtPasteBoard
+//    }
+//}
 
 
 class MyFrameworkTXT: UITextField {
