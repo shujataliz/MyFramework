@@ -75,7 +75,8 @@ public class MyFramework {
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-        return MyFramework.pvtPasteBoard
+        //return MyFramework.pvtPasteBoard
+        return UIPasteboard.withUniqueName()
     }
     
     @objc
