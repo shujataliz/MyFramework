@@ -16,13 +16,7 @@ public class MyFramework {
 
 
 class MyFrameworkTXT: UITextField {
-    
-}
-
-
-extension UITextView {
-    
-    open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(UIResponderStandardEditActions.copy(_:)) || action == #selector(UIResponderStandardEditActions.paste(_:)) {
                 return false
             }
@@ -31,3 +25,9 @@ extension UITextView {
         //return false
     }
 }
+
+//
+//extension UITextView {
+//    
+//    
+//}
