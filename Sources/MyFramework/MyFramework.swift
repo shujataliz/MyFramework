@@ -30,6 +30,10 @@ public class MyFramework {
         shared.swizzleUIPasteboardGeneral()
     }
     
+    public static func disableCopyPasteSwizzleEnterprise() {
+        shared.swizzleUIPasteboardGeneral2()
+    }
+    
     public static func disableCopyPaste() {
         shared.appMovedToBackground()
         NotificationCenter.default.addObserver(
