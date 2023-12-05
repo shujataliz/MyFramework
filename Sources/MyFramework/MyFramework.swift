@@ -14,8 +14,9 @@ public class MyFramework {
     }
     
     public static func disableCopyPaste() {
+        shared.appMovedToBackground()
         NotificationCenter.default.addObserver(
-            self,
+            shared,
             selector: #selector(shared.appMovedToBackground),
             name: UIApplication.willResignActiveNotification,
             object: nil
