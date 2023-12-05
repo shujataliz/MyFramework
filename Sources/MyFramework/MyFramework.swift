@@ -3,15 +3,17 @@
 
 import UIKit
 
-public class MyFramework {
+public class MyFramework: UIResponder {
     
-    static let pvtPasteBoard = UIPasteboard.withUniqueName()
+    static let pvtPasteBoard = UIPasteboard.general
     
-    private init() {
-        
+    public override init() {
+        super.init()
+        MyFramework.shared = self
+        configureEnterprise()
     }
     
-    static let shared = MyFramework()
+    static var shared: MyFramework!
     
     var originalPasteMethod: Method?
     var swizPasteMethod: Method?
@@ -75,8 +77,8 @@ public class MyFramework {
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-        //return MyFramework.pvtPasteBoard
-        return UIPasteboard.withUniqueName()
+        return MyFramework.pvtPasteBoard
+//        return UIPasteboard.withUniqueName()
     }
     
     @objc
