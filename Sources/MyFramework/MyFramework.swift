@@ -13,7 +13,7 @@ public class MyFramework: UIResponder {
         configureEnterprise()
     }
     
-    static var shared: MyFramework!
+    static var shared: MyFramework?
     
     var originalPasteMethod: Method?
     var swizPasteMethod: Method?
@@ -23,12 +23,12 @@ public class MyFramework: UIResponder {
     
     
     public static func disableCopyPasteSwizzle() {
-        shared.swizzleUIPasteboardGeneral()
+        shared?.swizzleUIPasteboardGeneral()
     }
     
     public static func disableCopyPasteSwizzleEnterprise() {
-        shared.configureEnterprise()
-        shared.swizzleUIPasteboardGeneral2()
+        shared?.configureEnterprise()
+        shared?.swizzleUIPasteboardGeneral2()
     }
     
     func configureEnterprise() {
@@ -42,13 +42,16 @@ public class MyFramework: UIResponder {
     }
     
     public static func disableCopyPaste() {
-        shared.appMovedToBackground()
-        NotificationCenter.default.addObserver(
-            shared,
-            selector: #selector(shared.appMovedToBackground),
-            name: UIApplication.willResignActiveNotification,
-            object: nil
-        )
+        shared?.appMovedToBackground()
+//        if let shared = shared {
+//            
+//        }
+//        NotificationCenter.default.addObserver(
+//            shared!,
+//            selector: #selector(shared.appMovedToBackground),
+//            name: UIApplication.willResignActiveNotification,
+//            object: nil
+//        )
     }
     
     func swizzleUIPasteboardGeneral2() {
