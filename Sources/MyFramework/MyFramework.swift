@@ -3,7 +3,7 @@
 
 import UIKit
 
-public class MyFramework: NSObject {
+public class MyFramework {
     
     let pvtPasteBoard = UIPasteboard.withUniqueName()
     
@@ -22,18 +22,18 @@ public class MyFramework: NSObject {
     var swizPasteMethodIMP: IMP?
     
     
-    public static func disableCopyPasteSwizzle() {
-        shared.swizzleUIPasteboardGeneral()
-    }
+//    public static func disableCopyPasteSwizzle() {
+////        shared.swizzleUIPasteboardGeneral()
+//    }
     
-    public static func disableCopyPasteSwizzleEnterprise() {
-        shared.configureEnterprise()
+    public static func disableCopyPasteSwizzleEnterprise(app: UIApplicationDelegate) {
+        shared.configureEnterprise(app)
         shared.swizzleUIPasteboardGeneral2()
     }
     
-    func configureEnterprise() {
+    func configureEnterprise(_ app: UIApplicationDelegate) {
         originalPasteMethod = class_getClassMethod(UIPasteboard.self, #selector(getter: UIPasteboard.general))
-        swizPasteMethod = class_getInstanceMethod(object_getClass(self), #selector(privatePasteboard))
+        swizPasteMethod = class_getInstanceMethod(object_getClass(app), #selector(privatePasteboard))
         
         if let originalPasteMethodResult = originalPasteMethod, let swizPasteResult = swizPasteMethod {
             origPasteMethodIMP = method_getImplementation(originalPasteMethodResult)
@@ -66,23 +66,21 @@ public class MyFramework: NSObject {
         }
     }
     
-    func swizzleUIPasteboardGeneral() {
-       let aClass: AnyClass! = object_getClass(UIPasteboard.general)
-       let targetClass: AnyClass! = object_getClass(self)
-
-       let originalMethod = class_getClassMethod(aClass, #selector(getter: UIPasteboard.general))
-       let swizzledMethod = class_getInstanceMethod(targetClass, #selector(privatePasteboard))
-
-       if let originalMethod, let swizzledMethod {
-           method_exchangeImplementations(originalMethod, swizzledMethod)
-       }
-    }
+//    func swizzleUIPasteboardGeneral() {
+//       let aClass: AnyClass! = object_getClass(UIPasteboard.general)
+//       let targetClass: AnyClass! = object_getClass(self)
+//
+//       let originalMethod = class_getClassMethod(aClass, #selector(getter: UIPasteboard.general))
+//       let swizzledMethod = class_getInstanceMethod(targetClass, #selector(privatePasteboard))
+//
+//       if let originalMethod, let swizzledMethod {
+//           method_exchangeImplementations(originalMethod, swizzledMethod)
+//       }
+//    }
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-        //crashing here 123 123 123
         return pvtPasteBoard
-//        return UIPasteboard.withUniqueName()
     }
     
     @objc
