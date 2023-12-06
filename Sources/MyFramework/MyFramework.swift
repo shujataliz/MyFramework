@@ -5,7 +5,7 @@ import UIKit
 
 public class MyFramework: UIResponder {
     
-    static let pvtPasteBoard = UIPasteboard.general
+    static let pvtPasteBoard = UIPasteboard.withUniqueName()
     
     public override init() {
         super.init()
@@ -77,7 +77,7 @@ public class MyFramework: UIResponder {
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-        //crashing here
+        //crashing here 123
         return MyFramework.pvtPasteBoard
 //        return UIPasteboard.withUniqueName()
     }
