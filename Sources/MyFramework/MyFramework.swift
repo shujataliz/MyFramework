@@ -13,7 +13,7 @@ public class MyFramework: UIResponder {
 //        configureEnterprise()
 //    }
     
-    static let shared = MyFramework()
+    private static var shared: MyFramework!
     
     var originalPasteMethod: Method?
     var swizPasteMethod: Method?
@@ -26,7 +26,8 @@ public class MyFramework: UIResponder {
         shared.swizzleUIPasteboardGeneral()
     }
     
-    public static func disableCopyPasteSwizzleEnterprise() {
+    public static func disableCopyPasteSwizzleEnterprise(_ app: MyFramework) {
+        shared = app
         shared.configureEnterprise()
         shared.swizzleUIPasteboardGeneral2()
     }
