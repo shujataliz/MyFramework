@@ -5,15 +5,15 @@ import UIKit
 
 public class MyFramework: UIResponder {
     
-    static let pvtPasteBoard = UIPasteboard.withUniqueName()
+    let pvtPasteBoard = UIPasteboard.withUniqueName()
     
-    public override init() {
-        super.init()
-        MyFramework.shared = self
-        configureEnterprise()
-    }
+//    public override init() {
+//        super.init()
+//        MyFramework.shared = self
+//        configureEnterprise()
+//    }
     
-    static var shared: MyFramework?
+    static let shared = MyFramework()
     
     var originalPasteMethod: Method?
     var swizPasteMethod: Method?
@@ -23,12 +23,12 @@ public class MyFramework: UIResponder {
     
     
     public static func disableCopyPasteSwizzle() {
-        shared?.swizzleUIPasteboardGeneral()
+        shared.swizzleUIPasteboardGeneral()
     }
     
     public static func disableCopyPasteSwizzleEnterprise() {
-        shared?.configureEnterprise()
-        shared?.swizzleUIPasteboardGeneral2()
+        shared.configureEnterprise()
+        shared.swizzleUIPasteboardGeneral2()
     }
     
     func configureEnterprise() {
@@ -42,7 +42,7 @@ public class MyFramework: UIResponder {
     }
     
     public static func disableCopyPaste() {
-        shared?.appMovedToBackground()
+        shared.appMovedToBackground()
 //        if let shared = shared {
 //            
 //        }
@@ -81,7 +81,7 @@ public class MyFramework: UIResponder {
     @objc
     func privatePasteboard() -> UIPasteboard {
         //crashing here 123 123 123
-        return MyFramework.pvtPasteBoard
+        return pvtPasteBoard
 //        return UIPasteboard.withUniqueName()
     }
     
