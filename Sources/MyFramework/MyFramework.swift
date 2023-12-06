@@ -5,13 +5,7 @@ import UIKit
 
 public class MyFramework {
     
-    let pvtPasteBoard = UIPasteboard.withUniqueName()
-    
-//    public override init() {
-//        super.init()
-//        MyFramework.shared = self
-//        configureEnterprise()
-//    }
+    static let pvtPasteBoard = UIPasteboard.withUniqueName()
     
     static let shared = MyFramework()
     
@@ -80,7 +74,7 @@ public class MyFramework {
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-        return pvtPasteBoard
+        return MyFramework.pvtPasteBoard
     }
     
     @objc
