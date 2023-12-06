@@ -3,7 +3,7 @@
 
 import UIKit
 
-public class MyFramework: UIResponder {
+public class MyFramework: NSObject {
     
     let pvtPasteBoard = UIPasteboard.withUniqueName()
     
@@ -13,7 +13,7 @@ public class MyFramework: UIResponder {
 //        configureEnterprise()
 //    }
     
-    private static var shared: MyFramework!
+    static var shared: MyFramework!
     
     var originalPasteMethod: Method?
     var swizPasteMethod: Method?
@@ -26,10 +26,12 @@ public class MyFramework: UIResponder {
         shared.swizzleUIPasteboardGeneral()
     }
     
-    public static func disableCopyPasteSwizzleEnterprise(_ app: MyFramework) {
-        shared = app
-        shared.configureEnterprise()
-        shared.swizzleUIPasteboardGeneral2()
+    public static func disableCopyPasteSwizzleEnterprise() {
+        if let app = UIApplication.shared.delegate as? MyFramework {
+            shared = app
+            shared.configureEnterprise()
+            shared.swizzleUIPasteboardGeneral2()
+        }
     }
     
     func configureEnterprise() {
