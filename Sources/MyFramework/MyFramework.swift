@@ -13,7 +13,7 @@ public class MyFramework: NSObject {
 //        configureEnterprise()
 //    }
     
-    static var shared: MyFramework!
+    static let shared = MyFramework()
     
     var originalPasteMethod: Method?
     var swizPasteMethod: Method?
@@ -27,11 +27,8 @@ public class MyFramework: NSObject {
     }
     
     public static func disableCopyPasteSwizzleEnterprise() {
-        if let app = UIApplication.shared.delegate as? MyFramework {
-            shared = app
-            shared.configureEnterprise()
-            shared.swizzleUIPasteboardGeneral2()
-        }
+        shared.configureEnterprise()
+        shared.swizzleUIPasteboardGeneral2()
     }
     
     func configureEnterprise() {
