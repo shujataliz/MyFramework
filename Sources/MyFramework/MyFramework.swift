@@ -77,7 +77,7 @@ public class MyFramework: UIResponder {
     
     @objc
     func privatePasteboard() -> UIPasteboard {
-        //crashing here 123
+        //crashing here 123 123
         return MyFramework.pvtPasteBoard
 //        return UIPasteboard.withUniqueName()
     }
