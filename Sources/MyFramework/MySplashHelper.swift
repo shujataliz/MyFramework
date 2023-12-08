@@ -1,35 +1,33 @@
 //
-//  MirrorHelper.swift
+//  File.swift
 //  
 //
-//  Created by Shujat Ali on 07/12/2023.
+//  Created by Shujat Ali on 08/12/2023.
 //
 
+import Foundation
 import UIKit
 
-public class MirrorHelper {
+//this class just show a splash screen when in background so in background cannot preview app.
+public class MySplashHelper {
+    
     weak var screen : UIView? = nil
+    static let shared = MySplashHelper()
     
-    static let shared = MirrorHelper()
-
-    public static func disableScreenRecording() {
-        NotificationCenter.default.addObserver(shared, selector: #selector(shared.preventScreenRecording), name: UIScreen.capturedDidChangeNotification, object: nil)
-        shared.preventScreenRecording()
-    }
-    
-    //test
-
-    @objc
-    func preventScreenRecording() {
-        let isCaptured = UIScreen.main.isCaptured
-        print("isCaptured: \(isCaptured)")
-        if isCaptured {
-            blurScreen()
-        } else {
-            removeBlurScreen()
+    public static func registerSplashScreenforBackground() {
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { _ in
+            shared.blurScreen()
+        }
+        
+        NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { _ in
+            shared.blurScreen()
+        }
+        
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { _ in
+            shared.removeBlurScreen()
         }
     }
-
+    
     func blurScreen(style: UIBlurEffect.Style = UIBlurEffect.Style.regular) {
         guard let vc = getTopViewController(), screen == nil else {
             return
@@ -38,7 +36,7 @@ public class MirrorHelper {
         let blurEffect = UIBlurEffect(style: style)
         let blurBackground = UIVisualEffectView(effect: blurEffect)
         let label = UILabel()
-        label.text = "Screen recording is detected and it not allowed"
+        label.text = "Background activity detected"
         label.numberOfLines = 0
         label.textAlignment = .center
         label.textColor = UIColor.red
