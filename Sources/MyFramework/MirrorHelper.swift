@@ -14,6 +14,7 @@ public class MirrorHelper {
 
     public static func disableScreenRecording() {
         NotificationCenter.default.addObserver(shared, selector: #selector(shared.preventScreenRecording), name: UIScreen.capturedDidChangeNotification, object: nil)
+        shared.preventScreenRecording()
     }
 
     @objc
